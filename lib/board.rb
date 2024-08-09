@@ -13,7 +13,8 @@ class Board
     end
 
     def place_piece(user_column_chosen,user_symbol)
-        column_choosen = user_column_choosen -1
+        @user_symbol = user_symbol  # Store the symbol as an instance variable
+        column_choosen = user_column_chosen -1
 
         # Validate the chosen column
         unless (0..6).include?(column_choosen)
@@ -36,23 +37,51 @@ class Board
     end
 
     def check_for_win
-        position = []
-        i=0
-        @grid.each_with_index do |element,row_index|
-            element.each_with_index do |n,column_index|
-                if n == @user_symbol
-                    position = [row_index,column_index]
-                    break
+        @grid.each_with_index do |element, row_index|
+            element.each_with_index do |n, column_index|
+                next unless n == @user_symbol  # Only check positions with the user's symbol
+    
+                # Horizontal check (to the right)
+                if column_index <= 3 && @grid[row_index][column_index] == @grid[row_index][column_index + 1] &&
+                   @grid[row_index][column_index + 1] == @grid[row_index][column_index + 2] &&
+                   @grid[row_index][column_index + 2] == @grid[row_index][column_index + 3]
+                    puts "The player with #{@user_symbol} has won horizontally!"
+                    return true
+                end
+    
+                # Vertical check (downward)
+                if row_index <= 2 && @grid[row_index][column_index] == @grid[row_index + 1][column_index] &&
+                   @grid[row_index + 1][column_index] == @grid[row_index + 2][column_index] &&
+                   @grid[row_index + 2][column_index] == @grid[row_index + 3][column_index]
+                    puts "The player with #{@user_symbol} has won vertically!"
+                    return true
+                end
+    
+                # Diagonal check (\ direction)
+                if row_index <= 2 && column_index <= 3 && @grid[row_index][column_index] == @grid[row_index + 1][column_index + 1] &&
+                   @grid[row_index + 1][column_index + 1] == @grid[row_index + 2][column_index + 2] &&
+                   @grid[row_index + 2][column_index + 2] == @grid[row_index + 3][column_index + 3]
+                    puts "The player with #{@user_symbol} has won diagonally (\\)!"
+                    return true
+                end
+    
+                # Diagonal check (/ direction)
+                if row_index >= 3 && column_index <= 3 && @grid[row_index][column_index] == @grid[row_index - 1][column_index + 1] &&
+                   @grid[row_index - 1][column_index + 1] == @grid[row_index - 2][column_index + 2] &&
+                   @grid[row_index - 2][column_index + 2] == @grid[row_index - 3][column_index + 3]
+                    puts "The player with #{@user_symbol} has won diagonally (/)! "
+                    return true
                 end
             end
         end
-
-        # We got the position of @user_symbol [x,y]
-        if 
-
+    
+        return false  # No win found after checking all positions
     end
+    
+    
 
 end
+
 
 board = Board.new
 board.display
