@@ -77,6 +77,17 @@ class Board
     
         return false  # No win found after checking all positions
     end
+
+    def check_for_draw
+        if @grid.all? { |row| row.all? { |cell| cell != "." } } && !check_for_win
+            puts "It's a draw. Let's start a new game."
+            initialize
+            return true
+        end
+        return false
+    end
+
+
     
     
 
