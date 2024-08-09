@@ -1,6 +1,8 @@
-require 'player.rb'
+require_relative 'player.rb'
 
 class Board
+
+    attr_reader :grid
 
     def initialize 
         @grid = Array.new(6){ Array.new(7, ".") }
@@ -13,7 +15,7 @@ class Board
     end
 
     def place_piece(user_column_chosen,user_symbol)
-        @user_symbol = user_symbol  # Store the symbol as an instance variable
+        
         column_choosen = user_column_chosen -1
 
         # Validate the chosen column
@@ -39,13 +41,13 @@ class Board
     def check_for_win
         @grid.each_with_index do |element, row_index|
             element.each_with_index do |n, column_index|
-                next unless n == @user_symbol  # Only check positions with the user's symbol
+                next if n == "."  # Only check positions with the user's symbol
     
                 # Horizontal check (to the right)
                 if column_index <= 3 && @grid[row_index][column_index] == @grid[row_index][column_index + 1] &&
                    @grid[row_index][column_index + 1] == @grid[row_index][column_index + 2] &&
                    @grid[row_index][column_index + 2] == @grid[row_index][column_index + 3]
-                    puts "The player with #{@user_symbol} has won horizontally!"
+                    puts "The player with #{@grid[row_index][column_index]} has won horizontally!"
                     return true
                 end
     
@@ -53,7 +55,7 @@ class Board
                 if row_index <= 2 && @grid[row_index][column_index] == @grid[row_index + 1][column_index] &&
                    @grid[row_index + 1][column_index] == @grid[row_index + 2][column_index] &&
                    @grid[row_index + 2][column_index] == @grid[row_index + 3][column_index]
-                    puts "The player with #{@user_symbol} has won vertically!"
+                    puts "The player with #{@grid[row_index][column_index]} has won vertically!"
                     return true
                 end
     
@@ -61,7 +63,7 @@ class Board
                 if row_index <= 2 && column_index <= 3 && @grid[row_index][column_index] == @grid[row_index + 1][column_index + 1] &&
                    @grid[row_index + 1][column_index + 1] == @grid[row_index + 2][column_index + 2] &&
                    @grid[row_index + 2][column_index + 2] == @grid[row_index + 3][column_index + 3]
-                    puts "The player with #{@user_symbol} has won diagonally (\\)!"
+                    puts "The player with #{@grid[row_index][column_index]} has won diagonally (\\)!"
                     return true
                 end
     
@@ -69,7 +71,7 @@ class Board
                 if row_index >= 3 && column_index <= 3 && @grid[row_index][column_index] == @grid[row_index - 1][column_index + 1] &&
                    @grid[row_index - 1][column_index + 1] == @grid[row_index - 2][column_index + 2] &&
                    @grid[row_index - 2][column_index + 2] == @grid[row_index - 3][column_index + 3]
-                    puts "The player with #{@user_symbol} has won diagonally (/)! "
+                    puts "The player with #{@grid[row_index][column_index]} has won diagonally (/)! "
                     return true
                 end
             end
@@ -86,13 +88,5 @@ class Board
         end
         return false
     end
-
-
-    
-    
-
 end
 
-
-board = Board.new
-board.display
